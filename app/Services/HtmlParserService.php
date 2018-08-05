@@ -31,6 +31,7 @@ class HtmlParserService
      * @param string $html
      * @param array $xpaths
      * @return string[]
+     * @throws \InvalidArgumentException
      */
     public function parse(string $html, array $xpaths): array
     {
@@ -56,5 +57,32 @@ class HtmlParserService
             $strings[] = implode('', $s);
         }
         return $strings;
+    }
+
+    /**
+     * Вырезает из указанного html-текста html теги кроме строчных, заголовков, таблиц и параграфов,
+     *  а также инлайновые стили
+     *
+     * @param $html
+     * @return string
+     */
+    public function strip(string $html): string
+    {
+        $html = strip_tags($html, implode('', $this->getAllowedTags()));
+        $html = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $html);
+        $html = preg_replace('/(<[^>]+) style=\'.*?\'/i', '$1', $html);
+
+        return $html;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAllowedTags(): array
+    {
+        return [
+            '<small>', '<h1>', '<h2>', '<h3>', '<h4>', '<h5>', '<h6>', '<p>',
+            '<table>', '<thead>', '<tbody>', '<tr>', '<td>', '<th>'
+        ];
     }
 }

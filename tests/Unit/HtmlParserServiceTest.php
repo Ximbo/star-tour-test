@@ -10,14 +10,13 @@ use App\Services\HtmlParserService;
 class HtmlParserServiceTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Test parse
      *
      * @return void
      */
     public function testParse()
     {
-        /** @var HtmlParserService $service */
-        $service = $this->app->make(HtmlParserService::class);
+        $service = $this->getService();
         $xpaths = [
             'id="main_content"',
             'class="main_block_of_content"',
@@ -30,6 +29,39 @@ class HtmlParserServiceTest extends TestCase
             'mboc_text31<p>mboc_text32</p>'
         ];
         $this->assertEquals($expected, $results);
+    }
+
+    /**
+     * Test strip
+     *
+     * @return void
+     */
+    public function testStrip()
+    {
+        $service = $this->getService();
+        $html = implode('', [
+            '<small>SmallText</small>',
+            '<h1>H1</h1>',
+            '<table style="color: red;"><tbody><tr><td>TD</td></tr></tbody></table>',
+            '<p><b>H1</b><br>mboc_text_21<br><br><b>H2</b><br>mboc_text_22</p>'
+        ]);
+        $result = $service->strip($html);
+        $expected = implode('', [
+            '<small>SmallText</small>',
+            '<h1>H1</h1>',
+            '<table><tbody><tr><td>TD</td></tr></tbody></table>',
+            '<p>H1mboc_text_21H2mboc_text_22</p>'
+        ]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return HtmlParserService
+     */
+    private function getService()
+    {
+        /** @var HtmlParserService $service */
+        return $this->app->make(HtmlParserService::class);
     }
 
     /**
