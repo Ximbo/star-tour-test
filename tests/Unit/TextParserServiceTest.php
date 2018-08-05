@@ -63,7 +63,7 @@ class TextParserServiceTest extends TestCase
             $this->assertArrayHasKey('xpath', $result);
         }
 
-        $this->assertEquals($results, $expected);
+        $this->assertEquals($expected, $results);
     }
 
     /**
