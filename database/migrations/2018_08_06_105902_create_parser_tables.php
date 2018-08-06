@@ -24,7 +24,7 @@ class CreateParserTables extends Migration
         Schema::create(Xpath::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('url_id');
-            $table->string('xpath');
+            $table->string('xpath')->unique();
 
             $table->foreign('url_id')
                 ->references('id')->on(Url::TABLE)
