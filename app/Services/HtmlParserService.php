@@ -39,7 +39,9 @@ class HtmlParserService
             throw new \InvalidArgumentException('Не указаны селекторы поиска');
         }
         $doc = new \DOMDocument;
+        \libxml_use_internal_errors(true);
         $doc->loadHTML($html);
+        \libxml_use_internal_errors(false);
         $xpath = new \DOMXPath($doc);
         // Like $query = "//*[@id='main_content']//*[@class='main_block_of_content']//*[@class='mboc_text']";
         $query = '';
