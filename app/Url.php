@@ -31,4 +31,15 @@ class Url extends Model
     {
         return $this->hasMany(Xpath::class, 'url_id', 'id');
     }
+
+    /**
+     * Get by xpath array
+     *
+     * @param array $xpath
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function xpath(array $xpath)
+    {
+        return $this->xpaths()->where('xpath', implode(Xpath::DELIMITER, $xpath));
+    }
 }

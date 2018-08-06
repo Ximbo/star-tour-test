@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 class Xpath extends Model
 {
     const TABLE = 'xpaths';
+    const DELIMITER = '::';
 
     /** @var string */
     protected $table = self::TABLE;
@@ -39,5 +40,23 @@ class Xpath extends Model
     public function url()
     {
         return $this->belongsTo(Url::class);
+    }
+
+    /**
+     * @return array
+     */
+    public function getXpaths(): array
+    {
+        return explode(self::DELIMITER, (string) $this->xpath);
+    }
+
+    /**
+     * @param array $xpaths
+     * @return $this
+     */
+    public function setXpaths(array $xpaths)
+    {
+        $this->xpath = implode(self::DELIMITER, $xpaths);
+        return $this;
     }
 }
